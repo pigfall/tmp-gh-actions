@@ -1,7 +1,5 @@
 name: Build SFTP Server
-on:
-  pull_request:
-    brached: ["tzz/sftp-server"] #TODO
+on: [push]
 
 jobs:
   build:
