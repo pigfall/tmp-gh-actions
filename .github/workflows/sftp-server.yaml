@@ -1,8 +1,9 @@
 name: Build SFTP Server
 on: 
   push:
-    paths:
-      - 'sftp-server/**'
+    tags:
+      - "v*.*.*"
+
 
 jobs:
   build:
