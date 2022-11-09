@@ -17,3 +17,8 @@ jobs:
 
       - name: Build sfpt-server
         run: cd sftp-server && ./compile.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Upload artifact
+          path: ./sftp-server/sftp-server
