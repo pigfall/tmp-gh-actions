@@ -1,5 +1,8 @@
 name: Build SFTP Server
-on: [push]
+on: 
+  push:
+    paths:
+      - 'sftp-server/**'
 
 jobs:
   build:
@@ -18,7 +21,7 @@ jobs:
       - name: Build sfpt-server
         run: cd sftp-server && ./compile.sh
 
-      - uses: actions/upload-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Upload artifact
-          path: ./sftp-server/sftp-server
+          files: ./sftp-server/sftp-server
