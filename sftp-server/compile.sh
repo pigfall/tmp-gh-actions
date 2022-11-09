@@ -3,6 +3,7 @@
 set -ex
 
 git submodule update --init
+cp files/sftp-server-main.c openssh-portable/
 
 
 (

@@ -1,0 +1,21 @@
+name: PullRequest
+on:
+  pull_request:
+    brached: ["tzz/sftp-server"] #TODO
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install musl-tools
+        run: |
+          set -ex
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build sfpt-server
+        run: cd sftp-server && compile.sh
