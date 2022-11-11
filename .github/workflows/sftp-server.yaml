@@ -23,12 +23,13 @@ jobs:
         run: cd sftp-server && ./compile.sh
 
       - name: Compress artifacts
-        run: tar -czvf artifacts.tar.gz sftp-server/sfpt-server
+        run: tar -czvf artifacts.tar.gz sftp-server/sftp-server
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: ./sftp-server/sftp-server
+
       - name: Publish
         env:
           GITHUB_TOKEN: "${{ secrets.RELEASE_REPO_SECRET }}"
