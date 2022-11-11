@@ -22,7 +22,15 @@ jobs:
       - name: Build sfpt-server
         run: cd sftp-server && ./compile.sh
 
+      - name: Compress artifacts
+        run: tar -czvf artifacts.tar.gz sftp-server/sfpt-server
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: ./sftp-server/sftp-server
+      - name: Publish
+        env:
+          GITHUB_TOKEN: "${{ secrets.RELEASE_REPO_SECRET }}"
+        run: |
+          gh release create ${{github.ref_name}}  artifacts.tar.gz -R https://github.com/crafting-dev/sandbox-artifacts/
