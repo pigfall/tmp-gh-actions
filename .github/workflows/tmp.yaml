@@ -1,12 +1,35 @@
-name: Build Tmp
 on: 
   push:
     tags:
       - "v*.*.*"
 
+
 jobs:
-  build:
-    name: Build
+  create-release:
+    name: Create Release
+    needs: [build-sftp-server]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - name: Compress artifacts
+        run: tar -czvf artifacts.tar.gz artifacts
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./sftp-server/sftp-server
+
+      - name: Publish To Dedicated Repo
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW }}
+        run: |
+          gh release create ${{github.ref_name}}  artifacts.tar.gz -R https://github.com/pigfall/tmp-releases.git
+
+  build-sftp-server:
+    name: Build SFTP Server
     runs-on: ubuntu-latest
     steps:
       - name: Install musl-tools
@@ -21,16 +44,9 @@ jobs:
       - name: Build sfpt-server
         run: cd sftp-server && ./compile.sh
 
-      - name: Compress artifacts
-        run: tar -czvf artifacts.tar.gz sftp-server/sftp-server
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          files: ./sftp-server/sftp-server
-
-      - name: Publish
-        env:
-          GH_TOKEN: ${{ secrets.WORKFLOW }}
-        run: |
-          gh release create ${{github.ref_name}}  artifacts.tar.gz -R https://github.com/pigfall/tmp-releases.git
+          name: sftp-server-name
+          path: sftp-server/sftp-server
+          retention-days: 1
