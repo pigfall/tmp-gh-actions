@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build sfpt-server
-        run: cd sftp-server && ./compile.sh
+        run: cd sftp-server && ./compile.sh && chmod +x sftp-server
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
